@@ -13,25 +13,84 @@ firebase.initializeApp(firebaseConfig);
 
 var db = firebase.firestore();
 
-// Add a new document in collection "cities"
-function add(){
-    carsSearch = getFromParam();
-    db.collection("cars").doc().set({
-        name: carsSearch.name,
-        price: carsSearch.price,
-    })
-    .then(function () {
-        console.log("Document successfully written!");
-    })
-    .catch(function (error) {
-        console.error("Error writing document: ", error);
-    });
-}
-
-function getFromParam(){
-    return {
-        name: document.getElementById("name").value,
-        price: document.getElementById("price").value,
+var app = new Vue({
+    el: '#app',
+    data: {
+        cars: [],
+        selectedCar: {
+            id: "",
+            name: "",
+            price: "",
+        },
+        addedCar: {
+            id:"",
+            name: "",
+            price: "",
+        }
+    },
+    mounted: function () {
+        this.getCars();
+    },
+    methods: {
+        getCars: function () {
+            var self = this;
+            self.cars=[];
+            db.collection("cars").get()
+                .then(function (querySnapshot) {
+                    console.log("Document successfully written!");
+                    querySnapshot.forEach(function (doc) {
+                        self.cars.push(
+                            {
+                                id: doc.id,
+                                name: doc.data().name,
+                                price: doc.data().price
+                            }
+                        );
+                    });
+                })
+                .catch(function (error) {
+                    console.error("Error writing document: ", error);
+                })
+        },
+        addCar: function () {
+            var self = this;
+            db.collection("cars").add({
+                name: this.addedCar.name,
+                price: this.addedCar.price,
+            })
+                .then(function (docRef) {
+                    console.log("Document successfully written!");
+                    self.addAvailablity(docRef.id);
+                })
+                .catch(function (error) {
+                    console.error("Error writing document: ", error);
+                });
+        },
+        addAvailablity: function(carId){
+            var self = this;
+            db.collection("availability").doc().set({
+                carID: carId,
+                price: this.addedCar.price,
+                startDate: new Date(),
+                endDate: ""
+            })
+                .then(function () {
+                    console.log("Document successfully written!");
+                    self.getCars();
+                })
+                .catch(function (error) {
+                    console.error("Error writing document: ", error);
+                });
+        },
+        deleteCar: function () {
+            var self = this;
+            db.collection("cars").doc(this.selectedCar.id).delete().then(function () {
+                console.log("Document successfully deleted!");
+                self.getCars();
+            }).catch(function (error) {
+                console.error("Error removing document: ", error);
+            });
+        },
     }
-}
+})
 
