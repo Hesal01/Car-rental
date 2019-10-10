@@ -9,6 +9,7 @@
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/5eaef5dc02.js" crossorigin="anonymous"></script>
 </header>
 
 <body>
@@ -41,7 +42,7 @@
                 <div class="col-4">
                     <div class="list-group overflow-auto">
                         <button type="button" class="list-group-item list-group-item-action text-primary" data-toggle="modal"
-                            data-target="#exampleModal">
+                            data-target="#addCarModal">
                             + Ajouter un véhicule
                         </button>
                     </div>
@@ -61,7 +62,10 @@
                         <div class="font-weight-bold col-8">
                             {{selectedCar.name}}
                         </div>
-                        <div class="col-4 text-right">
+                        <div class="col-4 font-weight-bold text-right">
+                            <a class="text-primary mr-2" type="button" data-toggle="modal" data-target="#addAvailabilityModal">
+                                <i class="far fa-calendar-plus" style="font-size:20px;"></i>
+                            </a>
                             <span>{{selectedCar.price}}</span>
                             <span>MAD</span>
                         </div>
@@ -71,12 +75,33 @@
                 </div>
             </div>
             <!-- MODAL -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            <div class="modal fade" id="addCarModal" tabindex="-1" role="dialog" aria-labelledby="addCarModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <h5 class="modal-title" id="addCarModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" v-model="addedCar.name">
+                            <input type="text" v-model="addedCar.price">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            <button v-on:click="addCar()" type="button" class="btn btn-primary">Valider</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="addAvailabilityModal" tabindex="-1" role="dialog" aria-labelledby="addAvailabilityModal"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addAvailabilityModal">Modal title</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

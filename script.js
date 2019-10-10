@@ -26,6 +26,13 @@ var app = new Vue({
             id:"",
             name: "",
             price: "",
+        },
+        addedAvailability: {
+            carID: "",
+            description: "",
+            price: "",
+            startDate: "",
+            endDate: ""
         }
     },
     mounted: function () {
@@ -60,21 +67,37 @@ var app = new Vue({
             })
                 .then(function (docRef) {
                     console.log("Document successfully written!");
-                    self.addAvailablity(docRef.id);
+                    self.addDefaultAvailablity(docRef.id);
                 })
                 .catch(function (error) {
                     console.error("Error writing document: ", error);
                 });
         },
-        addAvailablity: function(carId){
+        addDefaultAvailablity: function(carId){
             var self = this;
-            db.collection("availability").doc().set({
+            db.collection("availability").add({
                 carID: carId,
+                description: "Default",
                 price: this.addedCar.price,
                 startDate: new Date(),
                 endDate: ""
             })
-                .then(function () {
+                .then(function (docRef) {
+                    console.log("Document successfully written!");
+                    self.getCars();
+                })
+                .catch(function (error) {
+                    console.error("Error writing document: ", error);
+                });
+        },
+        addAvailablity: function(){
+            var self = this;
+            db.collection("availability").add(
+                {
+                    
+                }
+            )
+                .then(function (docRef) {
                     console.log("Document successfully written!");
                     self.getCars();
                 })
